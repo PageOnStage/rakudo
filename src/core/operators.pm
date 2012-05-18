@@ -84,7 +84,7 @@ multi infix:<but>(Mu:U \$obj, @roles) {
 sub SEQUENCE($left, $right, :$exclude_end) {
     my @right := $right.flat;
     my $endpoint = @right.shift;
-    my $infinite = $endpoint ~~ Whatever;
+    my $infinite = $endpoint ~~ Whatever || $endpoint === $Inf;
     $endpoint = Bool::False if $infinite;
     my $tail := ().list;
 
@@ -110,6 +110,9 @@ sub SEQUENCE($left, $right, :$exclude_end) {
             my $b = $tail[1];
             my $c = $tail[2];
             if $code.defined { }
+            elsif $a !~~ Numeric {
+                $code = succpred($tail[*-1] cmp $endpoint);
+            }
             elsif $tail.elems == 3 {
                 my $ab = $b - $a;
                 if $ab == $c - $b {
