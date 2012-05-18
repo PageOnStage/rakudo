@@ -89,7 +89,7 @@ sub SEQUENCE($left, $right, :$exclude_end) {
     my $tail := ().list;
 
     my sub succpred($cmp) {
-        ($cmp < 0) ?? { $^x.succ } !! ( $cmp > 0 ?? { $^x.pred } !! { $^x } )
+        ($cmp < 0) ?? *.succ !! ( $cmp > 0 ?? *.succ !! { $^x } )
     }
 
     (GATHER({
